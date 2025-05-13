@@ -19,11 +19,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# read OPENAI_API_KEY and OPENWEATHER_API_KEY from .env file
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["OPENWEATHERMAP_API_KEY"] = os.getenv("OPENWEATHERMAP_API_KEY")
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Load configuration
-with open("config.toml", "rb") as f:
+with open("agent_config.toml", "rb") as f:
     config = tomli.load(f)
 
 
@@ -37,7 +41,10 @@ def main(host, port):
             raise MissingAPIKeyError(
                 'OPENAI_API_KEY environment variable not set.'
             )
-
+        if not os.getenv('OPENWEATHERMAP_API_KEY'):
+            raise MissingAPIKeyError(
+                'OPENWEATHERMAP_API_KEY environment variable not set.'
+            )
         # Create capabilities from config
         capabilities = AgentCapabilities(
             streaming=config["agent_card"]["capabilities"]["streaming"],

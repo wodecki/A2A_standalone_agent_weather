@@ -1,3 +1,4 @@
+import os
 from collections.abc import AsyncIterable
 from typing import Any, Literal
 
@@ -5,7 +6,7 @@ import httpx
 import tomli
 
 from langchain_core.messages import AIMessage, ToolMessage
-from langchain_core.tools import tool
+
 from pydantic import BaseModel
 
 from langgraph.checkpoint.memory import MemorySaver
@@ -13,14 +14,20 @@ from langgraph.prebuilt import create_react_agent
 
 from langchain_openai import ChatOpenAI
 
-from langchain_community.tools import WikipediaQueryRun
-from langchain_community.utilities import WikipediaAPIWrapper
+from langchain_community.agent_toolkits.load_tools import load_tools
 
 # Load configuration
 with open("agent_config.toml", "rb") as f:
     config = tomli.load(f)
 
-wikipedia = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["OPENWEATHERMAP_API_KEY"] = os.getenv("OPENWEATHERMAP_API_KEY")
+
+weather = load_tools(["openweathermap-api"])[0]
 
 memory = MemorySaver()
 
@@ -46,7 +53,7 @@ class Agent:
             model=config["model"]["name"], 
             temperature=config["model"]["temperature"]
         )
-        self.tools = [wikipedia]
+        self.tools = [weather]
 
         self.graph = create_react_agent(
             self.model,

@@ -1,12 +1,12 @@
 [agent]
-name = "WikipediaAgent"
+name = "WeatherAgent"
 system_instruction = """
-You are a specialized assistant for Wikipedia information. 
-Your sole purpose is to use the 'search_wikipedia' tool to answer questions about factual information. 
-If the user asks about anything other than factual information that could be found on Wikipedia, 
-politely state that you cannot help with that topic and can only assist with queries about factual information. 
+You are a weather assistant that provides weather information based on user location.
+You have access to a 'get_weather' tool that takes location as input and returns weather information.
+If the user asks about anything other than weather information, politely state that you can only assist with weather-related queries.
 Do not attempt to answer unrelated questions or use tools for other purposes.
 Set response status to input_required if the user needs to provide more information.
+Set response status to completed if the request is complete.
 Set response status to error if there is an error while processing the request.
 Set response status to completed if the request is complete.
 """
@@ -28,17 +28,17 @@ default_host = "localhost"
 default_port = 10000
 
 [agent_card]
-name = "Wikipedia Search Agent"
-description = "Helps with searching Wikipedia to find information"
+name = "Weather Agent"
+description = "Provides weather information based on location"
 version = "1.0.0"
 
 [agent_card.capabilities]
 streaming = true
-pushNotifications = true
+pushNotifications = false
 
 [[agent_card.skills]]
-id = "Wikipedia_search"
-name = "Wikipedia search tool"
-description = "Helps with searching Wikipedia to find information"
-tags = ["Wikipedia search", "Wikipedia data"]
-examples = ["Tell me about Adam Mickiewicz", "What is the capital of France?"]
+id = "get_weather"
+name = "Get Weather"
+description = "Retrieves weather information for a given location"
+tags = ["weather", "location"]
+examples = ["What's the weather in Seattle?", "Tell me the weather for London"]
