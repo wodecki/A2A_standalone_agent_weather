@@ -9,7 +9,7 @@ from collections.abc import AsyncIterable
 with open("agent_config.toml", "rb") as f:
     config = tomli.load(f)
 
-from agent import WikipediaAgent
+from agent import Agent
 from common.server import utils
 from common.server.task_manager import InMemoryTaskManager
 from common.types import (
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 class AgentTaskManager(InMemoryTaskManager):
     def __init__(
         self,
-        agent: WikipediaAgent,
+        agent: Agent,
         notification_sender_auth: PushNotificationSenderAuth,
     ):
         super().__init__()
@@ -113,12 +113,12 @@ class AgentTaskManager(InMemoryTaskManager):
         task_send_params: TaskSendParams = request.params
         if not utils.are_modalities_compatible(
             task_send_params.acceptedOutputModes,
-            WikipediaAgent.SUPPORTED_CONTENT_TYPES,
+            Agent.SUPPORTED_CONTENT_TYPES,
         ):
             logger.warning(
                 'Unsupported output mode. Received %s, Support %s',
                 task_send_params.acceptedOutputModes,
-                WikipediaAgent.SUPPORTED_CONTENT_TYPES,
+                Agent.SUPPORTED_CONTENT_TYPES,
             )
             return utils.new_incompatible_types_error(request.id)
 

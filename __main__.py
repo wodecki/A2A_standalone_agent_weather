@@ -4,7 +4,7 @@ import tomli
 
 import click
 
-from agent import WikipediaAgent
+from agent import Agent
 from task_manager import AgentTaskManager
 from common.server import A2AServer
 from common.types import (
@@ -62,8 +62,8 @@ def main(host, port):
             description=config["agent_card"]["description"],
             url=f'http://{host}:{port}/',
             version=config["agent_card"]["version"],
-            defaultInputModes=WikipediaAgent.SUPPORTED_CONTENT_TYPES,
-            defaultOutputModes=WikipediaAgent.SUPPORTED_CONTENT_TYPES,
+            defaultInputModes=Agent.SUPPORTED_CONTENT_TYPES,
+            defaultOutputModes=Agent.SUPPORTED_CONTENT_TYPES,
             capabilities=capabilities,
             skills=skills,
         )
@@ -73,7 +73,7 @@ def main(host, port):
         server = A2AServer(
             agent_card=agent_card,
             task_manager=AgentTaskManager(
-                agent=WikipediaAgent(),
+                agent=Agent(),
                 notification_sender_auth=notification_sender_auth,
             ),
             host=host,

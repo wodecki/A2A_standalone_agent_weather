@@ -35,7 +35,7 @@ class ResponseFormat(BaseModel):
 agent_name = config["agent"]["name"]
 
 # Define the agent class with the name from config
-class WikipediaAgent:
+class Agent:
     # Read system instruction from config
     SYSTEM_INSTRUCTION = config["agent"]["system_instruction"]
     # Read supported content types from config
