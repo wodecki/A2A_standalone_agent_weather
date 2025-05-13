@@ -17,7 +17,7 @@ from langchain_community.tools import WikipediaQueryRun
 from langchain_community.utilities import WikipediaAPIWrapper
 
 # Load configuration
-with open("config.toml", "rb") as f:
+with open("agent_config.toml", "rb") as f:
     config = tomli.load(f)
 
 wikipedia = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
@@ -57,15 +57,15 @@ class WikipediaAgent:
         )
 
     def invoke(self, query, sessionId) -> str:
-        config = {'configurable': {'thread_id': sessionId}}
-        self.graph.invoke({'messages': [('user', query)]}, config)
-        return self.get_agent_response(config)
+        graph_config = {'configurable': {'thread_id': sessionId}}
+        self.graph.invoke({'messages': [('user', query)]}, graph_config)
+        return self.get_agent_response(graph_config)
 
     async def stream(self, query, sessionId) -> AsyncIterable[dict[str, Any]]:
         inputs = {'messages': [('user', query)]}
-        config = {'configurable': {'thread_id': sessionId}}
+        graph_config = {'configurable': {'thread_id': sessionId}}
 
-        for item in self.graph.stream(inputs, config, stream_mode='values'):
+        for item in self.graph.stream(inputs, graph_config, stream_mode='values'):
             message = item['messages'][-1]
             if (
                 isinstance(message, AIMessage)
@@ -84,10 +84,10 @@ class WikipediaAgent:
                     'content': config["streaming"]["working_messages"][1],
                 }
 
-        yield self.get_agent_response(config)
+        yield self.get_agent_response(graph_config)
 
-    def get_agent_response(self, config):
-        current_state = self.graph.get_state(config)
+    def get_agent_response(self, graph_config):
+        current_state = self.graph.get_state(graph_config)
         structured_response = current_state.values.get('structured_response')
         if structured_response and isinstance(
             structured_response, ResponseFormat

@@ -6,7 +6,7 @@ import tomli
 from collections.abc import AsyncIterable
 
 # Load configuration
-with open("config.toml", "rb") as f:
+with open("agent_config.toml", "rb") as f:
     config = tomli.load(f)
 
 from agent import WikipediaAgent
