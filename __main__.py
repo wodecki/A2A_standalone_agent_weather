@@ -33,9 +33,9 @@ with open("config.toml", "rb") as f:
 def main(host, port):
     """Starts the Wikipedia Agent server."""
     try:
-        if not os.getenv('GOOGLE_API_KEY'):
+        if not os.getenv('OPENAI_API_KEY'):
             raise MissingAPIKeyError(
-                'GOOGLE_API_KEY environment variable not set.'
+                'OPENAI_API_KEY environment variable not set.'
             )
 
         # Create capabilities from config
