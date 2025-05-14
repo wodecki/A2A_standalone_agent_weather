@@ -1,6 +1,8 @@
-# Wikipedia Search Agent
+# Weather Forecast Agent
 
-A simple Wikipedia search agent built with LangGraph, following Configuration Driven Development principles.
+A simple weather forecast agent built with LangGraph, following Configuration Driven Development principles.
+
+Requires: OPENWEATHERMAP_API_KEY
 
 ## Configuration
 
